@@ -8,7 +8,7 @@ bool	is_map_line(char *line)
 	return (trimmed[0] == '1' || trimmed[0] == '0' || trimmed[0] == ' ');
 }
 
-bool close_and_free(char *line, int fd, t_cub_elements *cub3d, bool retu)
+bool	close_and_free(char *line, int fd, t_cub_elements *cub3d, bool retu)
 {
 	if (line)
 		free(line);

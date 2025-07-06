@@ -18,9 +18,9 @@ static bool	free_array_false(char **array)
 
 static bool	is_valid_rgb_components(char **rgb)
 {
-	int i;
-	int val;
-	int j;
+	int	i;
+	int	val;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -47,7 +47,7 @@ bool	assign_color(char *id, char *val, t_cub_elements *cub3d)
 	int		*target;
 
 	if (!val)
-		return false;
+		return (false);
 	temp = ft_split(val, ',');
 	if (!temp || !is_valid_rgb_components(temp))
 		return (free_array_false(temp));
@@ -65,5 +65,5 @@ bool	assign_color(char *id, char *val, t_cub_elements *cub3d)
 	else
 		cub3d->ceiling_color_set = true;
 	free_array_false(temp);
-	return true;
+	return (true);
 }

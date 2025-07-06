@@ -38,5 +38,4 @@ void	free_cub_elements(t_cub_elements *cub3d);
 char	*trim_spaces(char *str);
 bool	map_parsing(const char *filename, t_cub_elements *cub3d);
 
-
 #endif

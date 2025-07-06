@@ -47,6 +47,7 @@ static char	**alloc_map(const char *filename)
 	map[height] = NULL;
 	return (map);
 }
+
 static bool	copy_map_line(char *line, t_cub_elements *cub3d, int *i)
 {
 	if (!is_map_line(line))
