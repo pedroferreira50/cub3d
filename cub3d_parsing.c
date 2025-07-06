@@ -13,6 +13,8 @@ static void	init_struct(t_cub_elements *cub3d)
 	cub3d->ceiling_color[1] = 0;
 	cub3d->ceiling_color[2] = 0;
 	cub3d->map = NULL;
+	cub3d->floor_color_set = false;
+	cub3d->ceiling_color_set = false;
 }
 
 int	main(int argc, char **argv)
@@ -22,6 +24,7 @@ int	main(int argc, char **argv)
 	check_arguments(argc, argv);
 	init_struct(&cub3d);
 	scan_cub_elements(argv[1], &cub3d);
-	
+	map_parsing(argv[1], &cub3d);
+	//need to add eerror handling to main.
 	return (0);
 }

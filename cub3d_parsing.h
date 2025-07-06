@@ -24,10 +24,19 @@ typedef struct s_cub_elements
 	int		floor_color[3];
 	int		ceiling_color[3];
 	char	**map;
+	bool	ceiling_color_set;
+	bool	floor_color_set;
 }	t_cub_elements;
 
 void	check_arguments(int argc, char **argv);
 int		ft_strcmp(const char *s1, const char *s2);
 bool	scan_cub_elements(const char *filename, t_cub_elements *cub3d);
+bool	assign_color(char *id, char *val, t_cub_elements *cub3d);
+bool	is_map_line(char *line);
+bool	close_and_free(char *line, int fd, t_cub_elements *cub3d, bool retu);
+void	free_cub_elements(t_cub_elements *cub3d);
+char	*trim_spaces(char *str);
+bool	map_parsing(const char *filename, t_cub_elements *cub3d);
+
 
 #endif

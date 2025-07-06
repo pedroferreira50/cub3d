@@ -1,25 +1,5 @@
 #include "cub3d_parsing.h"
 
-static char	*trim_spaces(char *str)
-{
-	int	len;
-
-	while (*str == ' ')
-		str++;
-	len = ft_strlen(str);
-	while (len > 0 && str[len - 1] == ' ')
-		str[--len] = '\0';
-	return (str);
-}
-
-static bool	is_map_line(char *line)
-{
-	char	*trimmed;
-
-	trimmed = trim_spaces(line);
-	return (trimmed[0] == '1' || trimmed[0] == '0' || trimmed[0] == ' ');
-}
-
 static bool	is_texture_id(char *id)
 {
 	return (
@@ -32,11 +12,9 @@ static bool	is_texture_id(char *id)
 
 static bool	check_color_id(char *id, t_cub_elements *cub3d)
 {
-	if (ft_strcmp(id, "F") == 0
-		&& cub3d->floor_color[0] == 0 && cub3d->floor_color[1] == 0)
+	if (ft_strcmp(id, "F") == 0 && !cub3d->floor_color_set)
 		return (true);
-	if (ft_strcmp(id, "C") == 0
-		&& cub3d->ceiling_color[0] == 0 && cub3d->ceiling_color[1] == 0)
+	if (ft_strcmp(id, "C") == 0 && !cub3d->ceiling_color_set)
 		return (true);
 	return (false);
 }
@@ -100,23 +78,9 @@ static bool	check_element(char *line, t_cub_elements *cub3d)
 	if (val && is_texture_id(id))
 		result = assign_texture_path(id, val, cub3d);
 	else if (val && check_color_id(id, cub3d))
-		result = true;
+		result = assign_color(id, val, cub3d);
 	free_array(sstr);
 	return (result);
-}
-
-static void	free_cub_elements(t_cub_elements *cub3d)
-{
-	int	i;
-
-	free(cub3d->no_texture);
-	free(cub3d->so_texture);
-	free(cub3d->we_texture);
-	free(cub3d->ea_texture);
-	i = 0;
-	while (cub3d->map && cub3d->map[i])
-		free(cub3d->map[i++]);
-	free(cub3d->map);
 }
 
 bool	scan_cub_elements(const char *filename, t_cub_elements *cub3d)
@@ -134,28 +98,13 @@ bool	scan_cub_elements(const char *filename, t_cub_elements *cub3d)
 		if (!map_started && is_map_line(line))
 		{
 			if (!cub3d->no_texture || !cub3d->so_texture || !cub3d->we_texture || !cub3d->ea_texture ||
-				(cub3d->floor_color[0] == 0 && cub3d->floor_color[1] == 0) ||
-				(cub3d->ceiling_color[0] == 0 && cub3d->ceiling_color[1] == 0))
-			{
-				free(line);
-				close(fd);
-				free_cub_elements(cub3d);
-				return (false);
-			}
-			free(line);
-			close(fd);
-			return (true);
+				(!cub3d->floor_color_set || !cub3d->ceiling_color_set))
+				return (close_and_free(line, fd, cub3d, false));
+			return (close_and_free(line, fd, NULL, true));
 		}
 		if (!check_element(line, cub3d))
-		{
-			free(line);
-			close(fd);
-			free_cub_elements(cub3d);
-			return (false);
-		}
+			return (close_and_free(line, fd, cub3d, false));
 		free(line);
 	}
-	close(fd);
-	free_cub_elements(cub3d);
-	return (false);
+	return (close_and_free(NULL, fd, cub3d, false));
 }
