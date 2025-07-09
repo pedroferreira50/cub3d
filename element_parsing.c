@@ -12,9 +12,9 @@ static bool	is_texture_id(char *id)
 
 static bool	check_color_id(char *id, t_cub_elements *cub3d)
 {
-	if (ft_strcmp(id, "F") == 0 && !cub3d->floor_color_set)
+	if (ft_strcmp(id, "F") == 0 && !cub3d->floor_color->color_set)
 		return (true);
-	if (ft_strcmp(id, "C") == 0 && !cub3d->ceiling_color_set)
+	if (ft_strcmp(id, "C") == 0 && !cub3d->ceiling_color->color_set)
 		return (true);
 	return (false);
 }
@@ -23,14 +23,14 @@ static bool	assign_texture_path(char *id, char *val, t_cub_elements *cub3d)
 {
 	if (!val || val[0] != '.' || val[1] != '/')
 		return (false);
-	if (ft_strcmp(id, "NO") == 0 && !cub3d->no_texture)
-		cub3d->no_texture = ft_strdup(val);
-	else if (ft_strcmp(id, "SO") == 0 && !cub3d->so_texture)
-		cub3d->so_texture = ft_strdup(val);
-	else if (ft_strcmp(id, "WE") == 0 && !cub3d->we_texture)
-		cub3d->we_texture = ft_strdup(val);
-	else if (ft_strcmp(id, "EA") == 0 && !cub3d->ea_texture)
-		cub3d->ea_texture = ft_strdup(val);
+	if (ft_strcmp(id, "NO") == 0 && !cub3d->no_text->path)
+		cub3d->no_text->path = ft_strdup(val);
+	else if (ft_strcmp(id, "SO") == 0 && !cub3d->so_text->path)
+		cub3d->so_text->path = ft_strdup(val);
+	else if (ft_strcmp(id, "WE") == 0 && !cub3d->we_text->path)
+		cub3d->we_text->path = ft_strdup(val);
+	else if (ft_strcmp(id, "EA") == 0 && !cub3d->ea_text->path)
+		cub3d->ea_text->path = ft_strdup(val);
 	else
 		return (false);
 	return (true);
@@ -97,8 +97,10 @@ bool	scan_cub_elements(const char *filename, t_cub_elements *cub3d)
 	{
 		if (!map_started && is_map_line(line))
 		{
-			if (!cub3d->no_texture || !cub3d->so_texture || !cub3d->we_texture || !cub3d->ea_texture ||
-				(!cub3d->floor_color_set || !cub3d->ceiling_color_set))
+			if (!cub3d->no_text->path || !cub3d->so_text->path
+				|| !cub3d->we_text->path || !cub3d->ea_text->path
+				|| (!cub3d->floor_color->color_set
+				|| !cub3d->ceiling_color->color_set))
 				return (close_and_free(line, fd, cub3d, false));
 			return (close_and_free(line, fd, NULL, true));
 		}
