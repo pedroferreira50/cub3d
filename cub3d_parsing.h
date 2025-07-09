@@ -6,6 +6,38 @@
 # include <unistd.h>
 # include <stdbool.h>
 
+//will assign 0 1 2 3 automatically
+typedef enum e_wall {
+  NORTH,
+  SOUTH,
+  EAST,
+  WEST
+} t_wall;
+
+//might need math constants 
+#define PI      3.14159265f
+#define TWO_PI  6.28318530f
+
+//keys
+#define ESC    0xff1b
+#define UP     0xff52
+#define DOWN   0xff54
+#define LEFT   0xff51
+#define RIGHT  0xff53
+
+#define X   0
+#define Y   1
+#define COL 0
+#define ROW 1
+
+//core game constants 
+#define TILE_SIZE     64
+#define HALF_TILE     32    // used when centering textures
+#define PLAYER_HEIGHT 32
+#define SCALE         0.12f // minimap or UI scale factor
+#define FOV           1.047198f   // 60° in radians
+#define HALF_FOV      0.523599f   // 30° in radians
+
 /* typedef struct s_elements {
     bool	no;
     bool	so;
