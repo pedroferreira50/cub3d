@@ -53,6 +53,8 @@ typedef struct s_cub_elements
 	char	*so_texture;
 	char	*we_texture;
 	char	*ea_texture;
+  int               screen_width; //just realised i need this sorry 
+  int               screen_height;
 	int		floor_color[3];// could we make a sep colour struct for these? and put a ptr to it in here?? 
 	int		ceiling_color[3]; // could we make a sep colour struct for these? and put a ptr to it in here?? 
 	char	**map;
