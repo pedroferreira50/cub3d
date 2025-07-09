@@ -117,4 +117,10 @@ void	free_cub_elements(t_cub_elements *cub3d);
 char	*trim_spaces(char *str);
 bool	map_parsing(const char *filename, t_cub_elements *cub3d);
 
+//RENDERER
+void render_frame(t_cub_elements *app);
+void init_renderer(t_cub_elements *app, int screen_w, int screen_h);
+void destroy_renderer(t_cub_elements *app);
+
+
 #endif
