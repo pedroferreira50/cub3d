@@ -3,6 +3,8 @@
 
 # include "libft/libft.h"
 # include <fcntl.h>
+#include <math.h>
+#include <limits.h>
 # include <unistd.h>
 # include <stdbool.h>
 

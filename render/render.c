@@ -24,20 +24,21 @@ void destroy_renderer(t_cub_elements *app)
         mlx_destroy_window(app->mlx.mlx_ptr, app->mlx.win_ptr);
 }
 
-void render_frame(t_cub_elements *app)
+/*
+Casts a ray per vertical stripe x.
+Performs DDA to find the first wall hit.
+Calculates perpendicular distance to correct fish‑eye.
+Computes line height for that slice.
+Selects the correct wall texture based on hit side.
+Samples the texture per screen pixel y in the slice.
+*/
+/* High‑level routine you call each frame */
+void render_frame(t_cub_elements  *app)
 {
-    int x;
+    static t_ray *rays = NULL;
+    if (!rays)
+        rays = malloc(sizeof(*rays) * app->screen_width);
 
-    x = 0;
-    while (x < app->mlx.width)
-    {
-        // TODO: cast a ray for column x,
-        //       compute wall slice height & texture offset,
-        //       sample texture, and write pixels into app->mlx.img_data.
-        x++;
-    }
-    mlx_put_image_to_window(app->mlx.mlx_ptr,
-                            app->mlx.win_ptr,
-                            app->mlx.img_ptr,
-                            0, 0);
+    raycasting(app, rays);
+    draw_walls(app, rays);
 }
