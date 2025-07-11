@@ -25,12 +25,9 @@ void destroy_renderer(t_cub_elements *app)
 }
 
 /*
-Casts a ray per vertical stripe x.
-Performs DDA to find the first wall hit.
-Calculates perpendicular distance to correct fish‑eye.
-Computes line height for that slice.
-Selects the correct wall texture based on hit side.
-Samples the texture per screen pixel y in the slice.
+rays is a static ptr only allocated once teh first tiem render frame runs
+one ray per vertical column of the screen.
+so however many pixels wide is how many rays
 */
 /* High‑level routine you call each frame */
 void render_frame(t_cub_elements  *app)

@@ -1,5 +1,9 @@
 #include "cub3d_parsing.h"
 
+//return int representing colour usally in agba 4byte int
+//flattening a 2d arr into a 1d arr very common memory technique
+//basically instead of having 2pts represent you have one 1pt to do it
+//in row major order
 int get_tex_pixel(t_texture *tex, int x, int y)
 {
     int *data = (int *)tex->data;

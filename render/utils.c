@@ -1,5 +1,6 @@
 #include "../cub3d_parsing.h"
-//floating pt remainder 
+//floating pt remainder ie keep between 0 and 2pi for our calcs 
+//keep remainder of angle / 2pi
 float normalize_angle(float angle)
 {
     angle = fmod(angle, TWO_PI);
