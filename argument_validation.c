@@ -46,5 +46,4 @@ void	check_arguments(int argc, char **argv)
 	}
 	else if (is_cub_file(argv[1]))
 		exit(1);
-	ft_printf("File %s is valid.\n", argv[1]); // remove
 }

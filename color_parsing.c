@@ -41,29 +41,36 @@ static bool	is_valid_rgb_components(char **rgb)
 	return (i == 3);
 }
 
+int	rgb_to_hex(int rgb[3])
+{
+	return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
+}
+
 bool	assign_color(char *id, char *val, t_cub_elements *cub3d)
 {
 	char	**temp;
-	int		*target;
+	t_color	*color;
+	int		i;
 
 	if (!val)
 		return (false);
 	temp = ft_split(val, ',');
 	if (!temp || !is_valid_rgb_components(temp))
 		return (free_array_false(temp));
-	if (ft_strcmp(id, "F") == 0 && !cub3d->floor_color_set)
-		target = cub3d->floor_color;
-	else if (ft_strcmp(id, "C") == 0 && !cub3d->ceiling_color_set)
-		target = cub3d->ceiling_color;
+	if (ft_strcmp(id, "F") == 0 && !cub3d->floor_color->color_set)
+		color = cub3d->floor_color;
+	else if (ft_strcmp(id, "C") == 0 && !cub3d->ceiling_color->color_set)
+		color = cub3d->ceiling_color;
 	else
 		return (free_array_false(temp));
-	target[0] = ft_atoi(temp[0]);
-	target[1] = ft_atoi(temp[1]);
-	target[2] = ft_atoi(temp[2]);
-	if (target == cub3d->floor_color)
-		cub3d->floor_color_set = true;
-	else
-		cub3d->ceiling_color_set = true;
+	i = 0;
+	while (i < 3)
+	{
+		color->rgb_color[i] = ft_atoi(temp[i]);
+		i++;
+	}
+	color->color_set = true;
+	color->hex_color = rgb_to_hex(color->rgb_color);
 	free_array_false(temp);
 	return (true);
 }

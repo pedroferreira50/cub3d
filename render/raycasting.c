@@ -1,6 +1,6 @@
 #include "cub3d_parsing.h"
 
-/* Copies data from the previous column if two distances tie */
+/* Copies data from prev col if two distances tie ie same distanc */
 static void copy_last_ray(t_ray *rays, int col)
 {
     t_ray *curr = &rays[col];
@@ -83,3 +83,14 @@ void draw_walls(t_cub_elements  *app, t_ray *rays)
                            0, 0);
 }
 
+
+
+void store_ray_data(t_ray *ray, t_cast *cast, float angle, bool vertical)
+{
+    ray->angle = angle;
+    ray->dist = cast->distance;
+    ray->hit[X] = cast->hit[X];
+    ray->hit[Y] = cast->hit[Y];
+    ray->wall_content = cast->content;
+    ray->vertical_hit = vertical;
+}

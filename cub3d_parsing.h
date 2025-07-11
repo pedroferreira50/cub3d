@@ -1,54 +1,24 @@
 #ifndef CUB3D_PARSING_H
 # define CUB3D_PARSING_H
 
-# include "libft/libft.h"
+//# include "libft/libft.h"
 # include <fcntl.h>
 #include <math.h>
 #include <limits.h>
 # include <unistd.h>
 # include <stdbool.h>
 
-//will assign 0 1 2 3 automatically
-typedef enum e_wall {
-  NORTH,
-  SOUTH,
+#define PI         3.14159265
+#define TWO_PI     6.28318530
+#define HALF_PI    1.57079632
+
+typedef enum e_direction
+{
   EAST,
-  WEST
-} t_wall;
-
-//might need math constants 
-#define PI      3.14159265f
-#define TWO_PI  6.28318530f
-
-//keys
-#define ESC    0xff1b
-#define UP     0xff52
-#define DOWN   0xff54
-#define LEFT   0xff51
-#define RIGHT  0xff53
-
-#define X   0
-#define Y   1
-#define COL 0
-#define ROW 1
-
-//core game constants 
-#define TILE_SIZE     64
-#define HALF_TILE     32    // used when centering textures
-#define PLAYER_HEIGHT 32
-#define SCALE         0.12f // minimap or UI scale factor
-#define FOV           1.047198f   // 60° in radians
-#define HALF_FOV      0.523599f   // 30° in radians
-
-/* typedef struct s_elements {
-    bool	no;
-    bool	so;
-    bool	we;
-    bool	ea;
-    bool	f;
-    bool	c;
-}	t_elements; */
-
+	NORTH,
+	WEST,
+	SOUTH,
+}	t_direction;
 typedef struct s_cub_elements
 {
 	char	*no_texture;
@@ -68,27 +38,68 @@ typedef struct s_cub_elements
 	bool	floor_color_set; // could we make a sep colour struct for these? and put a ptr to it in here?? 
 }	t_cub_elements;
 
-// 
 
-
-// 2D array of chars 
 typedef struct s_map
 {
-    char    **map;       // i think this is thesame asyourone?maybe it isbetter to keep it in the central cub3d struct?? or we could have a pointer tothe map struct??
-    int     width; //COULDCALL THIS ROWS
-    int     height; // COULD CALL THIS COLUMNS IF LESS CONFUSING?? 
-}   t_map;
+	char	**map;
+	int		width;
+	int		height;
+}	t_map;
 
 typedef struct s_texture {
-    char    *img_path;
-    void    *data; //img obj loaded by minilibx eg use its fntcs to file to image so the image becomes useable data
-    int     width;
-    int     height;
-} t_texture;
+    char    *path;       // file path to the .xpm (or .png) file
+    void    *data;       // MLX image pointer returned by mlx_xpm_file_to_image
+    int     width;       // texture width in pixels
+    int     height;      // texture height in pixels
+}   t_texture;
 
-//ALl MLX-related pointers and info (window, image, etc): ie anything from mlx lib
-typedef struct s_mlx
+
+typedef struct s_cast {
+    bool    hitted;         // did this ray hit?
+    float   hit[2];         // exact X,Y hit point
+    float   distance;       // perp-corrected distance
+    char    content;        // map cell content ('1' for wall)
+}   t_cast;
+
+typedef struct s_ray {
+    float   dist;           // distance from player
+    float   angle;          // ray angle
+    int     hit[2];         // grid cell hit (x,y)
+    bool    up;             // facing up?
+    bool    left;           // facing left?
+    bool    vertical_hit;   // did we hit a vertical wall?
+    char    wall_content;   // which wall texture to use ('N','S','E','W')
+}   t_ray;
+
+typedef struct s_texture
 {
+	char	*path;
+	void	*data;
+	int		width;
+	int		height;
+}	t_texture;
+
+
+typedef struct s_color
+{
+	int		rgb_color[3]; // [0]=R, [1]=G, [2]=B
+	bool	color_set;   // whether this color was parsed
+	int		hex_color;  // optional convenience: combine rgb into 0xRRGGBB
+}	t_color;
+
+
+typedef struct s_player {
+    float   x;           // player pos X
+    float   y;           // player pos Y
+    float   dir_x;       // direction vector X
+    float   dir_y;       // direction vector Y
+    float   plane_x;     // camera plane X
+    float   plane_y;     // camera plane Y
+    float   angle;       // current facing angle (optional)
+    float   ray_step;    // horizontal FOV step per column
+}   t_player;
+
+typedef struct s_mlx {
     void    *mlx_ptr;
     void    *win_ptr;
     void    *img_ptr;
@@ -96,22 +107,10 @@ typedef struct s_mlx
     int     bits_per_pixel;
     int     line_length;
     int     endian;
-    int     width;
-    int     height;
-}   t_mlx;
+    int     width;      // screen width
+    int     height;     // screen height
+}   t_mlx
 
-  // Camera plane for 3D projection
-
-typedef struct s_player {
-	float	x;
-	float	y;
-	float	dir_x;
-	float	dir_y;
-	float	plane_x;
-	float	plane_y;
-}	t_player;
-
-// TO DO RAYCASTING STRUCT DO NOT KNOW ENOUGH ABOUT IT 
 
 void	check_arguments(int argc, char **argv);
 int		ft_strcmp(const char *s1, const char *s2);
@@ -122,6 +121,9 @@ bool	close_and_free(char *line, int fd, t_cub_elements *cub3d, bool retu);
 void	free_cub_elements(t_cub_elements *cub3d);
 char	*trim_spaces(char *str);
 bool	map_parsing(const char *filename, t_cub_elements *cub3d);
+t_map	*init_map(void);
+void	free_map(t_map *map);
+void	free_texture(t_texture *texture);
 
 //RENDERER
 void render_frame(t_cub_elements *app);
