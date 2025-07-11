@@ -4,6 +4,7 @@
 //# include "libft/libft.h"
 # include <fcntl.h>
 #include <math.h>
+#define _USE_MATH_DEFINES 
 #include <limits.h>
 # include <unistd.h>
 # include <stdbool.h>
@@ -12,6 +13,8 @@
 #define TWO_PI     6.28318530
 #define HALF_PI    1.57079632
 
+#define FOV (M_PI / 3)      // 60 degrees in radians
+#define HALF_FOV (FOV / 2)
 typedef enum e_direction
 {
   EAST,
@@ -19,6 +22,8 @@ typedef enum e_direction
 	WEST,
 	SOUTH,
 }	t_direction;
+
+enum { X, Y };
 typedef struct s_cub_elements
 {
 	char	*no_texture;
@@ -30,7 +35,7 @@ typedef struct s_cub_elements
   t_map map;
   t_texture texture;
   t_mlx mlx;
-  t_player *player; 
+  t_player player; 
 	int		floor_color[3];// could we make a sep colour struct for these? and put a ptr to it in here?? 
 	int		ceiling_color[3]; // could we make a sep colour struct for these? and put a ptr to it in here?? 
 	char	**map;
@@ -41,14 +46,15 @@ typedef struct s_cub_elements
 
 typedef struct s_map
 {
-	char	**map;
+	char	**map; //1wall , 0 empty
 	int		width;
 	int		height;
+  int     tile_size;    // Size of a map tile in pixels (often 64)
 }	t_map;
 
 typedef struct s_texture {
     char    *path;       // file path to the .xpm (or .png) file
-    void    *data;       // MLX image pointer returned by mlx_xpm_file_to_image
+    void    *data;       // MLX image pointer returned by mlx_xpm_file_to_image returns it as void* even though we know we'll use it as int
     int     width;       // texture width in pixels
     int     height;      // texture height in pixels
 }   t_texture;
@@ -126,9 +132,14 @@ void	free_map(t_map *map);
 void	free_texture(t_texture *texture);
 
 //RENDERER
+//render.c
 void render_frame(t_cub_elements *app);
 void init_renderer(t_cub_elements *app, int screen_w, int screen_h);
 void destroy_renderer(t_cub_elements *app);
+
+//putline.c
+int get_tex_pixel(t_texture *tex, int x, int y);
+void put_pixel(char *img_data, int x, int y, int color, t_mlx *mlx);
 
 
 #endif
