@@ -34,11 +34,8 @@ typedef struct s_cub_elements
   t_texture texture;
   t_mlx mlx;
   t_player player; 
-	int		floor_color[3];// could we make a sep colour struct for these? and put a ptr to it in here?? 
-	int		ceiling_color[3]; // could we make a sep colour struct for these? and put a ptr to it in here?? 
-	char	**map;
-	bool	ceiling_color_set; // could we make a sep colour struct for these? and put a ptr to it in here?? 
-	bool	floor_color_set; // could we make a sep colour struct for these? and put a ptr to it in here?? 
+  t_color floor;
+  t_color ceiling;
 }	t_cub_elements;
 
 
@@ -113,7 +110,7 @@ typedef struct s_mlx {
     int     endian;
     int     width;      // screen width
     int     height;     // screen height
-}   t_mlx
+}   t_mlx;
 
 
 void	check_arguments(int argc, char **argv);
