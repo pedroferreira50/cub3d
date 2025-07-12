@@ -30,8 +30,6 @@ typedef struct s_cub_elements
 	char	*so_texture;
 	char	*we_texture;
 	char	*ea_texture;
-  int               screen_width; //just realised i need this sorry 
-  int               screen_height;
   t_map map;
   t_texture texture;
   t_mlx mlx;
