@@ -66,11 +66,19 @@ typedef struct s_ray {
     float   dist;           // distance from player
     float   angle;          // ray angle
     int     hit[2];         // grid cell hit (x,y)
-    bool    up;             // facing up?
-    bool    left;           // facing left?
+    bool    N;             // facing up?
+    bool    E;           // facing left?
     bool    vertical_hit;   // did we hit a vertical wall?
     char    wall_content;   // which wall texture to use ('N','S','E','W')
 }   t_ray;
+
+typedef struct s_ray_step {
+    float next_x;
+    float next_y;
+    float x_step;
+    float y_step;
+    bool  facing_north;
+} t_ray_step;
 
 typedef struct s_texture
 {
