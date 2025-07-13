@@ -77,7 +77,7 @@ typedef struct s_ray_step {
     float next_y;
     float x_step;
     float y_step;
-    bool  facing_north;
+    t_direction vertical_dir;
 } t_ray_step;
 
 typedef struct s_texture
