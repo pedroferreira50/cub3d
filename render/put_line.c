@@ -6,7 +6,7 @@
 /*   By: gro-donn <gro-donn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:21:56 by gro-donn          #+#    #+#             */
-/*   Updated: 2025/07/13 13:27:23 by gro-donn         ###   ########.fr       */
+/*   Updated: 2025/07/13 21:32:38 by gro-donn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,19 @@ void	put_pixel(int x, int y, int color, t_mlx *mlx)
 
 	offset = (y * mlx->line_length) + (x * (mlx->bits_per_pixel / 8));
 	*(unsigned int *)(mlx->img_data + offset) = color;
+}
+
+int rgb_to_hex(int rgb[3])
+{
+    return (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+}
+
+void fill_column(t_mlx *mlx, int x, int y_start, int y_end, int color)
+{
+    int y = y_start;
+    while (y < y_end)
+    {
+        put_pixel(x, y, color, mlx);
+        y++;
+    }
 }

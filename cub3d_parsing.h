@@ -56,7 +56,7 @@ typedef struct s_texture {
 
 
 typedef struct s_cast {
-    bool    hitted;         // did this ray hit?
+    bool    hitted;         
     float   hit[2];         // exact X,Y hit point
     float   distance;       // perp-corrected distance
     char    content;        // map cell content ('1' for wall)
@@ -66,8 +66,8 @@ typedef struct s_ray {
     float   dist;           // distance from player
     float   angle;          // ray angle
     int     hit[2];         // grid cell hit (x,y)
-    bool    N;             // facing up?
-    bool    E;           // facing left?
+    bool    N;             
+    bool    E;          
     bool    vertical_hit;   // did we hit a vertical wall?
     char    wall_content;   // which wall texture to use ('N','S','E','W')
 }   t_ray;
@@ -89,7 +89,13 @@ typedef struct s_texture
 	int		height;
 }	t_texture;
 
-
+typedef struct s_render_slice {
+    int x;
+    int texX;
+    int start;
+    int end;
+    int line_h;
+}   t_render_slice;
 typedef struct s_color
 {
 	int		rgb_color[3]; // [0]=R, [1]=G, [2]=B
@@ -144,6 +150,7 @@ void destroy_renderer(t_cub_elements *app);
 //putline.c
 int get_tex_pixel(t_texture *tex, int x, int y);
 void put_pixel(char *img_data, int x, int y, int color, t_mlx *mlx);
+int rgb_to_hex(int rgb[3]);
 
 //collisions_hor.c
 void	find_horizontal_collision(t_map *map, t_player *player, float angle,
@@ -152,5 +159,6 @@ t_ray_step	init_ray_step(float x_intercept, float y_intercept, float x_step,
 		float y_step);
     void	find_vertical_collision(t_map *map, t_player *player, float angle,
 		t_cast *v);
+
 
 #endif
