@@ -24,8 +24,6 @@ Store the result into the ray buffer (rays[col]) so rendering code knows what to
  one ray result per screen column.
 The vertical_hit flag is important for later:
 Shade vertical walls darker Pick the right tex(e.g., N wall vs E wall)
-
-
  */
 static void cast_ray(t_cub_elements  *app, float angle, int col, t_ray *rays)
 {
@@ -33,7 +31,6 @@ static void cast_ray(t_cub_elements  *app, float angle, int col, t_ray *rays)
     find_horizontal_collision(&app->map, &app->player, angle, &h);
     find_vertical_collision  (&app->map, &app->player, angle, &v);
 
-    /* Correct for fish-eye distortion */
     float fish_eye = cos(app->player.angle - angle);
     if (!h.hitted) h.distance = INFINITY;
     else           h.distance = hit_distance(app->player.x, app->player.y, h.hit[X], h.hit[Y]) * fish_eye;
@@ -80,7 +77,7 @@ ach ray_step moves you a tiny bit to the right, until you sweep from left to rig
 void raycasting(t_cub_elements  *app, t_ray *rays)
 {
     float angle = app->player.angle - HALF_FOV;
-    for (int col = 0; col < app->screen_width; col++, angle += app->player.ray_step)
+    for (int col = 0; col < app->mlx.width; col++, angle += app->player.ray_step)
     {
         angle = normalize_angle(angle);
         cast_ray(app, angle, col, rays);

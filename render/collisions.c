@@ -1,23 +1,5 @@
 #include "cub3d_parsing.h"
-/*
- y
-   ^
-   |   ┌────────┐   ← Horizontal grid lines (at multiples of tile_size)
-   |   |        |
-   |---+--------+--- y = y_intercept (horizontal grid line)
-   |   |        |
-   |---+--------+--- y = y_intercept + tile_size
-   |   |        |
-   Player (•) shoots ray at angle θ:
 
-         /
-        /
-   •---/---------------------> x
-       ↑  ^
-       |  |
-       |  first horizontal intersection (y_intercept)
-       |
-*/
 void find_horizontal_collision(t_map *map, t_player *player, float angle, t_cast *h)
 {
     float y_intercept;
@@ -25,19 +7,18 @@ void find_horizontal_collision(t_map *map, t_player *player, float angle, t_cast
     float y_step;
     float x_step;
 
-    // Determine if ray is facing up or down
-    bool facing_up = angle > M_PI;               // between 180° and 360°
-    bool facing_down = !facing_up;
-
-    // Find the first horizontal grid line (y) the ray will intersect
-    if (facing_down)
-        y_intercept = floor(player->y / map->tile_size) * map->tile_size + map->tile_size;
-    else // facing up
+   bool facing_up   = is_ray_facing(NORTH, angle);
+  
+    if (facing_up)
         y_intercept = floor(player->y / map->tile_size) * map->tile_size - 0.0001f;
-
+    else 
+        y_intercept = floor(player->y / map->tile_size) * map->tile_size + map->tile_size;
+       
     // Calculate corresponding x at the intercept
     x_intercept = player->x + (y_intercept - player->y) / tan(angle);
 
+    bool facing_down   = is_ray_facing(SOUTH, angle);
+  
     // Calculate how far to step for each next horizontal gridline intersection
     y_step = facing_down ? map->tile_size : -map->tile_size;
     x_step = y_step / tan(angle);
