@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   collisions_hor.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gro-donn <gro-donn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 13:22:10 by gro-donn          #+#    #+#             */
+/*   Updated: 2025/07/13 13:59:05 by gro-donn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_parsing.h"
 
 // Calc how far to step for each next horizontal gridline intersection
@@ -12,25 +24,26 @@ float	calculate_y_intercept(t_player *player, t_map *map, float angle)
 		return (tile_y + map->tile_size);
 }
 
+// use dda to move along and check if go outside map or hit wall
+// and then record where it is
 static void	trace_horizontal_ray(t_map *map, t_ray_step *step, t_cast *h)
 {
-	int	map_x;
-	int	map_y;
+	int	m_x;
+	int	m_y;
 
 	while (1)
 	{
-		map_x = (int)(step->next_x) / map->tile_size;
+		m_x = (int)(step->next_x) / map->tile_size;
 		if (step->vertical_dir == NORTH)
-			map_y = ((int)(step->next_y) - 1) / map->tile_size;
+			m_y = ((int)(step->next_y) - 1) / map->tile_size;
 		else
-			map_y = (int)(step->next_y) / map->tile_size;
-		if (map_x < 0 || map_x >= map->width || map_y < 0
-			|| map_y >= map->height)
+			m_y = (int)(step->next_y) / map->tile_size;
+		if (m_x < 0 || m_x >= map->width || m_y < 0 || m_y >= map->height)
 		{
 			h->hitted = false;
 			return ;
 		}
-		if (map->map[map_y][map_x] == '1')
+		if (map->map[m_y][m_x] == '1')
 		{
 			h->hit[X] = step->next_x;
 			h->hit[Y] = step->next_y;
@@ -68,13 +81,15 @@ facing north	floor(120.5 / 64) = 1
 64 + 64 = 128
   // Calc  x at the intercept
 tan(angle) = opposite / adjacent = (Δy) / (Δx)
+find angle 
+find starting pt intercept
+then calc how far to go!!! the y is always easy tile size
+trigonometry for x
 */
 
 void	find_horizontal_collision(t_map *map, t_player *player, float angle,
 		t_cast *h)
 {
-	float		y_i;
-	float		x_i;
 	float		y_step;
 	float		x_step;
 	t_ray_step	step;
@@ -84,18 +99,19 @@ void	find_horizontal_collision(t_map *map, t_player *player, float angle,
 		vertical_dir = NORTH;
 	else
 		vertical_dir = SOUTH;
-	if ((vertical_dir == NORTH))
-		y_i = floor(player->y / map->tile_size) * map->tile_size - 0.0001f;
-	else
-		y_i = floor(player->y / map->tile_size) * map->tile_size
-			+ map->tile_size;
-	x_i = player->x + (y_i - player->y) / tan(angle);
 	if (vertical_dir == SOUTH)
+	{
 		y_step = map->tile_size;
+		x_step = map->tile_size / tan(angle);
+	}
 	else
+	{
 		y_step = -map->tile_size;
-	x_step = y_step / tan(angle);
-	step = init_horizontal_ray_step(x_i, y_i, x_step, y_step);
+		x_step = -map->tile_size / tan(angle);
+	}
+	step = init_horizontal_ray_step(player->x + (calculate_y_intercept(player,
+					map, angle) - player->y) / tan(angle),
+			calculate_y_intercept(player, map, angle), x_step, y_step);
 	step.vertical_dir = vertical_dir;
 	trace_horizontal_ray(map, &step, h);
 }
