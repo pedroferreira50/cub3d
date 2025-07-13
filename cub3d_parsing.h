@@ -78,6 +78,7 @@ typedef struct s_ray_step {
     float x_step;
     float y_step;
     t_direction vertical_dir;
+    t_direction horizontal_dir;
 } t_ray_step;
 
 typedef struct s_texture
@@ -144,5 +145,12 @@ void destroy_renderer(t_cub_elements *app);
 int get_tex_pixel(t_texture *tex, int x, int y);
 void put_pixel(char *img_data, int x, int y, int color, t_mlx *mlx);
 
+//collisions_hor.c
+void	find_horizontal_collision(t_map *map, t_player *player, float angle,
+		t_cast *h);
+t_ray_step	init_ray_step(float x_intercept, float y_intercept, float x_step,
+		float y_step);
+    void	find_vertical_collision(t_map *map, t_player *player, float angle,
+		t_cast *v);
 
 #endif

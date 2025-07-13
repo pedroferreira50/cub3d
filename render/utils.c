@@ -6,7 +6,7 @@
 /*   By: gro-donn <gro-donn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:23:19 by gro-donn          #+#    #+#             */
-/*   Updated: 2025/07/13 13:23:20 by gro-donn         ###   ########.fr       */
+/*   Updated: 2025/07/13 19:57:01 by gro-donn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,16 @@ float	normalize_angle(float angle)
 float	hit_distance(float x1, float y1, float x2, float y2)
 {
 	return (sqrtf((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+}
+
+t_ray_step	init_ray_step(float x_intercept, float y_intercept, float x_step,
+		float y_step)
+{
+	t_ray_step	step;
+
+	step.next_x = x_intercept;
+	step.next_y = y_intercept;
+	step.x_step = x_step;
+	step.y_step = y_step;
+	return (step);
 }

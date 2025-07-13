@@ -6,7 +6,7 @@
 /*   By: gro-donn <gro-donn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:22:10 by gro-donn          #+#    #+#             */
-/*   Updated: 2025/07/13 19:56:52 by gro-donn         ###   ########.fr       */
+/*   Updated: 2025/07/13 19:51:28 by gro-donn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,17 @@ static void	trace_ray(t_map *map, t_ray_step *step, t_cast *h)
 	}
 }
 
+t_ray_step	init_ray_step(float x_intercept, float y_intercept, float x_step,
+		float y_step)
+{
+	t_ray_step	step;
 
+	step.next_x = x_intercept;
+	step.next_y = y_intercept;
+	step.x_step = x_step;
+	step.y_step = y_step;
+	return (step);
+}
 
 /*
 If facing South, you want the gridline below you → add tile_size.
