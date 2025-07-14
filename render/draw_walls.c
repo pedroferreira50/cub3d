@@ -6,13 +6,30 @@
 /*   By: gro-donn <gro-donn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:22:05 by gro-donn          #+#    #+#             */
-/*   Updated: 2025/07/13 21:34:01 by gro-donn         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:28:16 by gro-donn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d_parsing.h"
 
 /* Draws vertical wall slices based on distances in `rays[]`
+vertical_hit = wall is vertical, facing east/west
+
++----+     ← wall aligned vertically
+|    | ← You hit this wall from the left (so it's EAST-facing)
+| P→ | ← vertical hit, wall_content = 'E'
+|    |
++----+
+horizontal_hit = wall is horizontal, facing north/south
+Top-down view of player hitting a horizontal wall:
+
++----+----+----+
+|    |    |    |
++----+----+----+
+|    | P  |    |
++----+----+----+
+     ↑
+     ray hit the wall above — a NORTH-facing wall
 */
 
 t_texture *select_texture(t_cub_elements *app, t_ray *ray)
@@ -65,8 +82,6 @@ void draw_wall_column(t_mlx *mlx, t_texture *tex, t_render_slice *slice)
     }
 }
 
-
-
 void draw_walls(t_cub_elements *app, t_ray *rays)
 {
     int x = 0;
@@ -95,7 +110,6 @@ void draw_walls(t_cub_elements *app, t_ray *rays)
        //  int ceiling_hex = rgb_to_hex(app->ceiling);
         fill_column(&app->mlx, x, 0, start, app->ceiling);
 
-        // 🎨 Draw wall
         draw_wall_column(&app->mlx, tex, &slice);
 
         // 🎨 Fill floor
@@ -104,10 +118,6 @@ void draw_walls(t_cub_elements *app, t_ray *rays)
 
         x++;
 
-        draw_wall_column(&app->mlx, tex, &slice);
-      
-
-        x++;
     }
     mlx_put_image_to_window(app->mlx.mlx_ptr, app->mlx.win_ptr, app->mlx.img_ptr, 0, 0);
 }
