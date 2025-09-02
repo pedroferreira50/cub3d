@@ -1,13 +1,34 @@
-#include "cub3d_parsing.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d_parsing.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 18:16:59 by pviegas-          #+#    #+#             */
+/*   Updated: 2025/09/02 05:24:30 by pviegas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	free_texture(t_texture *texture)
+#include "cub3d.h"
+
+// had to update this to avoid double free 
+//was causing segfault just put the ptr to null
+// Corrected: Destroy texture->img_ptr, not just texture->data
+void	free_texture(t_texture *texture, void *mlx_ptr)
 {
 	if (!texture)
 		return ;
+	if (mlx_ptr && texture->img_ptr)
+	{
+		mlx_destroy_image(mlx_ptr, texture->img_ptr);
+		texture->img_ptr = NULL;
+	}
 	if (texture->path)
+	{
 		free(texture->path);
-	if (texture->data)
-		free(texture->data);
+		texture->path = NULL;
+	}
 	free(texture);
 }
 
@@ -22,8 +43,15 @@ static t_texture	*init_text_struct(void)
 	texture->height = 0;
 	texture->width = 0;
 	texture->path = NULL;
+	texture->bits_per_pixel = 0;
+	texture->line_length = 0;
+	texture->endian = 0;
+	texture->path = NULL;
 	return (texture);
 }
+// ADDED THIS: texture->bits_per_pixel = 0;
+// ADD THIS: texture->line_length = 0;
+// <-- ADD THIS: texture->endian = 0;
 
 static t_color	*init_color_struct(void)
 {
@@ -49,58 +77,42 @@ static bool	init_cub_struct(t_cub_elements *cub3d)
 	cub3d->floor_color = NULL;
 	cub3d->ceiling_color = NULL;
 	cub3d->map = NULL;
+	cub3d->cub_file = NULL;
 	cub3d->no_text = init_text_struct();
-	if (!cub3d->no_text)
-		return (false);
 	cub3d->so_text = init_text_struct();
-	if (!cub3d->so_text)
-		return (false);
 	cub3d->we_text = init_text_struct();
-	if (!cub3d->we_text)
-		return (false);
 	cub3d->ea_text = init_text_struct();
-	if (!cub3d->ea_text)
-		return (false);
 	cub3d->floor_color = init_color_struct();
-	if (!cub3d->floor_color)
-		return (false);
 	cub3d->ceiling_color = init_color_struct();
-	if (!cub3d->ceiling_color)
+	if (!cub3d->no_text || !cub3d->so_text || !cub3d->we_text || !cub3d->ea_text
+		|| !cub3d->floor_color || !cub3d->ceiling_color)
 		return (false);
 	return (true);
 }
 
-static bool	cub3d_parsing(int argc, char **argv, t_cub_elements *cub3d)
+bool	cub3d_parsing(int argc, char **argv, t_cub_elements *cub3d)
 {
 	check_arguments(argc, argv);
 	if (!init_cub_struct(cub3d))
 	{
-		ft_printf("Error: Failed to initialize cub3d structure\n");
-		free_cub_elements(cub3d);
+		ft_putstr_fd("Error\n Failed to initialize cub3d structure\n", 2);
 		return (false);
 	}
-	if (!scan_cub_elements(argv[1], cub3d))
+	if (!scan_cub_elements(argv[1], cub3d, cub3d->ceiling_color,
+			cub3d->floor_color))
 	{
-		ft_printf("Error: Failed to parse cub elements\n");
+		ft_putstr_fd("Error\n Failed to parse cub elements\n", 2);
 		return (false);
 	}
-	if (!map_parsing(argv[1], cub3d))
+	if (!map_parsing(cub3d))
 	{
-		ft_printf("Error: Failed to parse map\n");
+		ft_putstr_fd("Error\n Failed to parse map\n", 2);
+		return (false);
+	}
+	if (!validate_map(cub3d))
+	{
+		ft_putstr_fd("Error\n Failed to parse map\n", 2);
 		return (false);
 	}
 	return (true);
-}
-
-int	main(int argc, char **argv)
-{
-	t_cub_elements	cub3d;
-
-	if (!cub3d_parsing(argc, argv, &cub3d))
-	{
-		ft_printf("Error: Parsing failed\n");
-		return (1);
-	}
-	free_cub_elements(&cub3d);
-	return (0);
 }
