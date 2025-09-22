@@ -6,7 +6,7 @@
 /*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:03:59 by pviegas-          #+#    #+#             */
-/*   Updated: 2025/09/02 05:18:47 by pviegas-         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:00:26 by pviegas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,34 +71,6 @@ static bool	check_element(char *line, t_cub_elements *cub3d)
 	free(val);
 	return (result);
 }
-
-/* bool	scan_cub_elements(const char *filename, t_cub_elements *cub3d,
-		t_color *ceil, t_color *floor)
-{
-	int		fd;
-	bool	map_started;
-	char	*line;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (false);
-	map_started = false;
-	line = get_next_line(fd);
-	while ((line))
-	{
-		if (!map_started && is_map_line(line))
-		{
-			if (!elements_loaded(cub3d, ceil, floor))
-				return (close_and_free(line, fd, cub3d, false));
-			return (close_and_free(line, fd, NULL, true));
-		}
-		if (!check_element(line, cub3d))
-			return (close_and_free(line, fd, cub3d, false));
-		free(line);
-		line = get_next_line(fd);
-	}
-	return (close_and_free(NULL, fd, cub3d, false));
-} */
 
 bool	scan_cub_elements(char *filename, t_cub_elements *cub3d,
 		t_color *ceil, t_color *floor)

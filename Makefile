@@ -10,7 +10,7 @@ ifeq ($(UNAME_S), Linux)
     MLX_FLAGS  = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 else ifeq ($(UNAME_S), Darwin)
     MLX_DIR    = ./minilibx_macos
-    MLX_FLAGS  = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+    MLX_FLAGS  = -L$(MLX_DIR) -framework OpenGL -framework AppKit
 endif
 
 # Includes
@@ -59,7 +59,7 @@ $(NAME): $(OBJ_DIR) $(OBJS)
 	@echo "$(YELLOW)Compiling libft...$(RESET)"
 	@$(MAKE) -C ./libft > /dev/null
 	@echo "$(YELLOW)Compiling MLX...$(RESET)"
-	@$(MLX_BUILD)
+	@$(MAKE) -C $(MLX_DIR) > /dev/null
 	@echo "$(YELLOW)Linking $(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 	@echo "$(GREEN)Build complete!$(RESET)"
