@@ -6,7 +6,7 @@
 /*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:22:24 by pviegas-          #+#    #+#             */
-/*   Updated: 2025/09/02 05:26:09 by pviegas-         ###   ########.fr       */
+/*   Updated: 2025/09/27 17:24:27 by pviegas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	data_init(int argc, char **argv, t_data *data)
 		return (1);
 	data->mlx->mlx_ptr = NULL;
 	data->mlx->win_ptr = NULL;
-	if (!cub3d_parsing(argc, argv, data->elem))
+	if (!cub3d_parsing(argc, argv, data))
 	{
 		return (1);
 	}

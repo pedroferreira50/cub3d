@@ -6,7 +6,7 @@
 /*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 17:58:52 by pviegas-          #+#    #+#             */
-/*   Updated: 2025/09/22 12:07:29 by pviegas-         ###   ########.fr       */
+/*   Updated: 2025/09/27 18:25:55 by pviegas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,12 @@ bool	map_parsing(t_cub_elements *cub3d)
 	if (cub3d->map == NULL)
 		return (false);
 	if (!assign_map_lines(cub3d))
+	{
+		free_map(cub3d->map);
+		cub3d->map = NULL;
+		return (false);
+	}
+	if (!normalise_map_lines(cub3d->map))
 	{
 		free_map(cub3d->map);
 		cub3d->map = NULL;

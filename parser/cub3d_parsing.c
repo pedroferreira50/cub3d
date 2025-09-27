@@ -6,7 +6,7 @@
 /*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:16:59 by pviegas-          #+#    #+#             */
-/*   Updated: 2025/09/02 05:33:54 by pviegas-         ###   ########.fr       */
+/*   Updated: 2025/09/27 17:40:03 by pviegas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static t_texture	*init_text_struct(void)
 	texture->bits_per_pixel = 0;
 	texture->line_length = 0;
 	texture->endian = 0;
-	texture->path = NULL;
+	texture->img_ptr = NULL;
 	return (texture);
 }
 // ADDED THIS: texture->bits_per_pixel = 0;
@@ -90,26 +90,26 @@ static bool	init_cub_struct(t_cub_elements *cub3d)
 	return (true);
 }
 
-bool	cub3d_parsing(int argc, char **argv, t_cub_elements *cub3d)
+bool	cub3d_parsing(int argc, char **argv, t_data *data)
 {
-	check_arguments(argc, argv);
-	if (!init_cub_struct(cub3d))
+	check_arguments(argc, argv, data);
+	if (!init_cub_struct(data->elem))
 	{
 		ft_putstr_fd("Error\nFailed to initialize cub3d structure\n", 2);
 		return (false);
 	}
-	if (!scan_cub_elements(argv[1], cub3d, cub3d->ceiling_color,
-			cub3d->floor_color))
+	if (!scan_cub_elements(argv[1], data->elem, data->elem->ceiling_color,
+			data->elem->floor_color))
 	{
 		ft_putstr_fd("Error\nFailed to parse cub elements\n", 2);
 		return (false);
 	}
-	if (!map_parsing(cub3d))
+	if (!map_parsing(data->elem))
 	{
 		ft_putstr_fd("Error\nFailed to parse map\n", 2);
 		return (false);
 	}
-	if (!validate_map(cub3d))
+	if (!validate_map(data->elem))
 	{
 		ft_putstr_fd("Error\nFailed to parse map\n", 2);
 		return (false);

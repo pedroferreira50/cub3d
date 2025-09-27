@@ -6,7 +6,7 @@
 /*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:26:04 by pviegas-          #+#    #+#             */
-/*   Updated: 2025/09/02 05:18:55 by pviegas-         ###   ########.fr       */
+/*   Updated: 2025/09/27 18:27:27 by pviegas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,45 @@ char	**store_cub(const char *filename)
 	cub_file[i] = NULL;
 	close(fd);
 	return (cub_file);
+}
+
+//Map padding
+static char	*dup_and_pad_line(const char *src, size_t width)
+{
+	char	*padded_line;
+	size_t	i;
+
+	padded_line = malloc(width + 1);
+	if (!padded_line)
+		return (NULL);
+	i = 0;
+	while (src[i] && src[i] != '\n' && i < width)
+	{
+		padded_line[i] = src[i];
+		i++;
+	}
+	while (i < width)
+		padded_line[i++] = ' ';
+	padded_line[width] = '\0';
+	return (padded_line);
+}
+
+bool	normalise_map_lines(t_map *map)
+{
+	int		y;
+	char	*old;
+	char	*new;
+
+	y = 0;
+	while (y < map->height)
+	{
+		old = map->map[y];
+		new = dup_and_pad_line(old, map->width);
+		if (!new)
+			return (false);
+		free(old);
+		map->map[y] = new;
+		y++;
+	}
+	return (true);
 }

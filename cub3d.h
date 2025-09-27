@@ -6,7 +6,7 @@
 /*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:26:20 by pviegas-          #+#    #+#             */
-/*   Updated: 2025/09/02 04:56:11 by pviegas-         ###   ########.fr       */
+/*   Updated: 2025/09/27 18:16:55 by pviegas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 # define KEY_ESC 65307
+
 //# define KEYPRESS 2
 //# define KeyRelease 3
 //# define DestroyNotify 17
@@ -220,7 +221,7 @@ typedef struct s_slice
 	int				height;
 }					t_slice;
 
-void				check_arguments(int argc, char **argv);
+void				check_arguments(int argc, char **argv, t_data *data);
 int					ft_strcmp(const char *s1, const char *s2);
 bool				scan_cub_elements(char *filename, t_cub_elements *cub3d,
 						t_color *ceil, t_color *floor);
@@ -236,7 +237,7 @@ char				**copy_map(char **map, int height);
 void				free_map(t_map *map);
 void				free_texture(t_texture *texture, void *mlx_ptr);
 int					init_mlx(t_mlx *mlx);
-bool				cub3d_parsing(int argc, char **argv, t_cub_elements *cub3d);
+bool				cub3d_parsing(int argc, char **argv, t_data *data);
 bool				validate_map(t_cub_elements *cub3d);
 int					xpm_to_img(t_cub_elements *elem, t_mlx *mlx);
 int					data_init(int argc, char **argv, t_data *data);
@@ -246,6 +247,7 @@ char				*join_strings(char **strings);
 bool				elements_loaded(t_cub_elements *cub3d,
 						t_color *ceil, t_color *floor);
 char				**store_cub(const char *filename);
+bool				normalise_map_lines(t_map *map);
 
 // render
 // render.c
